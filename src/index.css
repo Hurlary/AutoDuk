@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warm ops-console palette: paper canvas, ink text, one brand blue, peach highlight */
+    --background: 38 53% 96%;        /* #faf6ef */
+    --foreground: 345 6% 13%;        /* #231f20 */
+    --card: 40 60% 98%;              /* #fdfbf7 */
+    --card-foreground: 345 6% 13%;
+    --popover: 40 60% 98%;
+    --popover-foreground: 345 6% 13%;
+    --primary: 229 99% 59%;          /* #2e54fe brand blue */
+    --primary-foreground: 40 60% 98%;
+    --secondary: 36 30% 92%;         /* warm grey panel */
+    --secondary-foreground: 345 6% 13%;
+    --muted: 36 24% 92%;
+    --muted-foreground: 30 4% 57%;   /* #96908c */
+    --accent: 22 100% 79%;           /* #ffbc95 peach highlight */
+    --accent-foreground: 345 6% 13%;
+    --destructive: 12 68% 48%;       /* warm red derived from orange family */
+    --destructive-foreground: 40 60% 98%;
+    --success: 152 45% 36%;          /* derived warm green */
+    --warning: 24 90% 55%;           /* derived from secondary orange */
+    --border: 34 18% 86%;
+    --input: 34 18% 80%;
+    --ring: 229 99% 59%;
+    --radius: 0.375rem;              /* sharper, squared-off language */
+    --sidebar-background: 345 6% 13%;   /* ink sidebar */
+    --sidebar-foreground: 38 30% 88%;
+    --sidebar-primary: 229 99% 59%;
+    --sidebar-primary-foreground: 40 60% 98%;
+    --sidebar-accent: 345 8% 18%;
+    --sidebar-accent-foreground: 40 60% 98%;
+    --sidebar-border: 345 6% 20%;
+    --sidebar-ring: 229 99% 59%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: #ffbc95;
+    color: #231f20;
+  }
+  h1, h2, h3, h4 {
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+}
+
+@layer utilities {
+  .tnum {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-feature-settings: 'tnum' 1;
+    letter-spacing: -0.01em;
+  }
+  .micro-label {
+    @apply text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground;
+  }
+  /* Marketing display serif */
+  .font-display {
+    font-family: 'Fraunces', 'IBM Plex Sans', Georgia, serif;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* ---- Marketing motion system ---- */
+/* Scroll reveal: soft long fade-up */
+.reveal {
+  opacity: 0.25;
+  transform: translateY(1rem);
+  transition: opacity 1.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Media reveal: scale settles 1.05 → 1.0 as it enters */
+.reveal-media {
+  overflow: hidden;
+}
+.reveal-media > * {
+  transform: scale(1.05);
+  transition: transform 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+}
+.reveal-media.visible > * {
+  transform: scale(1);
+}
+/* Nav underline slide: full → zero width, sweeping right on hover */
+.u-link {
+  position: relative;
+}
+.u-link::after {
+  content: '';
+  position: absolute;
+  bottom: -0.18em;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .u-link:hover::after {
+    left: auto;
+    right: 0;
+    width: 0;
+  }
+}
+/* Stroke-draw SVG doodles (use pathLength={100} on paths) */
+.draw path[stroke],
+.draw circle[stroke] {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 2.2s cubic-bezier(0.4, 0, 0.2, 1) 0.15s;
+}
+.draw.visible path[stroke],
+.draw.visible circle[stroke] {
+  stroke-dashoffset: 0;
+}
+/* Page fade-in on load */
+@keyframes page-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.page-in {
+  animation: page-in 0.6s ease both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-media > *, .draw path[stroke], .draw circle[stroke] {
+    transition: none;
+    opacity: 1;
+    transform: none;
+    stroke-dashoffset: 0;
+  }
+}
